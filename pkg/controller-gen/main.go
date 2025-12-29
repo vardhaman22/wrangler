@@ -12,6 +12,7 @@ import (
 	"k8s.io/gengo/v2"
 	"k8s.io/gengo/v2/generator"
 	"k8s.io/gengo/v2/types"
+	"k8s.io/klog/v2"
 
 	cgargs "github.com/rancher/wrangler/v3/pkg/controller-gen/args"
 	"github.com/rancher/wrangler/v3/pkg/controller-gen/generators"
@@ -326,7 +327,11 @@ func generateOpenAPI(groups map[string]bool, customArgs *cgargs.CustomArgs) erro
 	}
 
 	getTargets := func(context *generator.Context) []generator.Target {
-		return oa.GetTargets(context, openAPIArgs)
+		boilerplate, err := gengo.GoBoilerplate(openAPIArgs.GoHeaderFile, gengo.StdBuildTag, gengo.StdGeneratedBy)
+		if err != nil {
+			klog.Fatalf("Failed loading boilerplate: %v", err)
+		}
+		return oa.GetOpenAPITargets(context, openAPIArgs, boilerplate)
 	}
 
 	return gengo.Execute(
