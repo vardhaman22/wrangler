@@ -2,6 +2,8 @@ module github.com/rancher/wrangler/v3
 
 go 1.25.0
 
+toolchain go1.25.4
+
 replace github.com/rancher/lasso => github.com/iYashMaurya/lasso v0.0.0-20251229045230-e8b5b0ffb53d
 
 require (
@@ -23,6 +25,7 @@ require (
 	k8s.io/code-generator v0.35.0
 	k8s.io/gengo v0.0.0-20250130153323-76c5745d3511
 	k8s.io/gengo/v2 v2.0.0-20250922181213-ec3ebc5fd46b
+	k8s.io/klog/v2 v2.130.1
 	k8s.io/kube-aggregator v0.35.0
 	k8s.io/kube-openapi v0.0.0-20250910181357-589584f1c912
 	sigs.k8s.io/cli-utils v0.37.2
@@ -93,7 +96,6 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	k8s.io/apiserver v0.35.0 // indirect
 	k8s.io/component-base v0.35.0 // indirect
-	k8s.io/klog/v2 v2.130.1 // indirect
 	k8s.io/utils v0.0.0-20251002143259-bc988d571ff4 // indirect
 	sigs.k8s.io/apiserver-network-proxy/konnectivity-client v0.31.2 // indirect
 	sigs.k8s.io/json v0.0.0-20250730193827-2d320260d730 // indirect
