@@ -300,6 +300,7 @@ func generateOpenAPI(groups map[string]bool, customArgs *cgargs.CustomArgs) erro
 	openAPIArgs.OutputFile = "zz_generated_openapi.go"
 	openAPIArgs.OutputPkg = customArgs.Options.OutputPackage + "/openapi"
 	openAPIArgs.GoHeaderFile = customArgs.Options.Boilerplate
+	openAPIArgs.OutputModelNameFile = "zz_generated_model.go"
 
 	if err := openAPIArgs.Validate(); err != nil {
 		return err
