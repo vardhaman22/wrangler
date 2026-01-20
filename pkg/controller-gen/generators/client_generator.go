@@ -106,6 +106,7 @@ func (cg *ClientGenerator) typesGroupVersionDocPackage(name *types.Name, gv sche
 	p.HeaderComment = []byte(fmt.Sprintf(`
 %s
 %s
+%s
 // +k8s:deepcopy-gen=package
 // +groupName=%s
 `, string(customArgs.BoilerplateContent), openAPIDirective, openAPIModelPackageDirective, gv.Group))
