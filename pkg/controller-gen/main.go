@@ -332,7 +332,8 @@ func generateOpenAPI(groups map[string]bool, customArgs *cgargs.CustomArgs) erro
 		if err != nil {
 			klog.Fatalf("Failed loading boilerplate: %v", err)
 		}
-		return oa.GetOpenAPITargets(context, openAPIArgs, boilerplate)
+
+		return append(oa.GetOpenAPITargets(context, openAPIArgs, boilerplate), oa.GetModelNameTargets(context, openAPIArgs, boilerplate)...)
 	}
 
 	return gengo.Execute(
