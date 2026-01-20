@@ -308,6 +308,9 @@ func generateOpenAPI(groups map[string]bool, customArgs *cgargs.CustomArgs) erro
 
 	inputDirsMap := map[string]bool{}
 	inputDirs := []string{}
+
+	inputModelDirsMap := map[string]bool{}
+	inputModelDirs := []string{}
 	for gv, names := range customArgs.TypesByGroup {
 		if !groups[gv.Group] {
 			continue
@@ -316,6 +319,9 @@ func generateOpenAPI(groups map[string]bool, customArgs *cgargs.CustomArgs) erro
 		if _, found := inputDirsMap[names[0].Package]; !found {
 			inputDirsMap[names[0].Package] = true
 			inputDirs = append(inputDirs, names[0].Package)
+
+			inputModelDirsMap[names[0].Package] = true
+			inputModelDirs = append(inputModelDirs, names[0].Package)
 		}
 
 		group := customArgs.Options.Groups[gv.Group]
@@ -333,15 +339,35 @@ func generateOpenAPI(groups map[string]bool, customArgs *cgargs.CustomArgs) erro
 			klog.Fatalf("Failed loading boilerplate: %v", err)
 		}
 
-		return append(oa.GetOpenAPITargets(context, openAPIArgs, boilerplate), oa.GetModelNameTargets(context, openAPIArgs, boilerplate)...)
+		return oa.GetOpenAPITargets(context, openAPIArgs, boilerplate)
 	}
 
-	return gengo.Execute(
+	getModelNameTargets := func(context *generator.Context) []generator.Target {
+		boilerplate, err := gengo.GoBoilerplate(openAPIArgs.GoHeaderFile, gengo.StdBuildTag, gengo.StdGeneratedBy)
+		if err != nil {
+			klog.Fatalf("Failed loading boilerplate: %v", err)
+		}
+
+		return oa.GetModelNameTargets(context, openAPIArgs, boilerplate)
+	}
+
+	err := gengo.Execute(
 		oa.NameSystems(),
 		oa.DefaultNameSystem(),
 		getTargets,
 		gengo.StdBuildTag,
 		inputDirs,
+	)
+	if err != nil {
+		return err
+	}
+
+	return gengo.Execute(
+		oa.NameSystems(),
+		oa.DefaultNameSystem(),
+		getModelNameTargets,
+		gengo.StdBuildTag,
+		inputModelDirs,
 	)
 }
 
