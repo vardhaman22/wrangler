@@ -97,12 +97,18 @@ func (cg *ClientGenerator) typesGroupVersionDocPackage(name *types.Name, gv sche
 		openAPIDirective = fmt.Sprintf("\n// +k8s:openapi-gen=true")
 	}
 
+	openAPIModelPackageDirective := ""
+
+	if customArgs.Options.Groups[gv.Group].OpenAPIModelPackageName != "" {
+		openAPIModelPackageDirective = fmt.Sprintf("\n// +k8s:openapi-model-package=%s", customArgs.Options.Groups[gv.Group].OpenAPIModelPackageName)
+	}
+
 	p.HeaderComment = []byte(fmt.Sprintf(`
 %s
 %s
 // +k8s:deepcopy-gen=package
 // +groupName=%s
-`, string(customArgs.BoilerplateContent), openAPIDirective, gv.Group))
+`, string(customArgs.BoilerplateContent), openAPIDirective, openAPIModelPackageDirective, gv.Group))
 
 	return p
 }
