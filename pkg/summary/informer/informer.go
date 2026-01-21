@@ -128,7 +128,7 @@ func NewFilteredSummaryInformerWithOptions(
 	return &summaryInformer{
 		gvr: gvr,
 		informer: cache.NewSharedIndexInformer(
-			&cache.ListWatch{
+			cache.ToListWatcherWithWatchListSemantics(&cache.ListWatch{
 				ListFunc: func(options metav1.ListOptions) (runtime.Object, error) {
 					if tweakListOptions != nil {
 						tweakListOptions(&options)
@@ -141,7 +141,7 @@ func NewFilteredSummaryInformerWithOptions(
 					}
 					return client.ResourceWithOptions(gvr, opts).Namespace(namespace).Watch(context.TODO(), options)
 				},
-			},
+			}, client),
 			&summary.SummarizedObject{},
 			resyncPeriod,
 			indexers,
@@ -154,7 +154,7 @@ func NewFilteredSummaryInformer(client client.Interface, gvr schema.GroupVersion
 	return &summaryInformer{
 		gvr: gvr,
 		informer: cache.NewSharedIndexInformer(
-			&cache.ListWatch{
+			cache.ToListWatcherWithWatchListSemantics(&cache.ListWatch{
 				ListFunc: func(options metav1.ListOptions) (runtime.Object, error) {
 					if tweakListOptions != nil {
 						tweakListOptions(&options)
@@ -167,7 +167,7 @@ func NewFilteredSummaryInformer(client client.Interface, gvr schema.GroupVersion
 					}
 					return client.Resource(gvr).Namespace(namespace).Watch(context.TODO(), options)
 				},
-			},
+			}, client),
 			&summary.SummarizedObject{},
 			resyncPeriod,
 			indexers,
