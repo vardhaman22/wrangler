@@ -4,6 +4,8 @@ go 1.26.0
 
 toolchain go1.26.2
 
+replace github.com/rancher/lasso => github.com/vardhaman22/lasso v0.0.0-20260505105142-a58cfbb7f92a
+
 require (
 	github.com/evanphx/json-patch v5.9.11+incompatible
 	github.com/ghodss/yaml v1.0.0
