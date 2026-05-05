@@ -45,7 +45,8 @@ func Test_addResourceEventHandler(t *testing.T) {
 
 type handlerRegistration struct{}
 
-func (h handlerRegistration) HasSynced() bool { return true }
+func (h handlerRegistration) HasSynced() bool                     { return true }
+func (h handlerRegistration) HasSyncedChecker() cache.DoneChecker { return nil }
 
 // fakeInformer implements a subset of cache.SharedIndexInformer, only those methods used by addResourceEventHandler
 type fakeInformer struct {
